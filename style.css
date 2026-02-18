@@ -277,6 +277,25 @@ body {
     margin-top: 1rem;
 }
 
+.project-links {
+    margin-top: 1rem;
+}
+
+.project-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-link:hover {
+    color: var(--secondary-color);
+    transform: translateX(5px);
+}
+
 /* Education Section */
 .education-grid {
     display: grid;
