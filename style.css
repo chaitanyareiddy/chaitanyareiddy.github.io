@@ -40,6 +40,17 @@ body {
     text-align: center;
 }
 
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1.5rem;
+    display: block;
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 .name {
     font-size: 3rem;
     font-weight: 700;
@@ -413,6 +424,12 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .profile-image {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 1rem;
+    }
+    
     .name {
         font-size: 2.25rem;
     }
@@ -460,6 +477,11 @@ body {
 }
 
 @media (max-width: 480px) {
+    .profile-image {
+        width: 100px;
+        height: 100px;
+    }
+    
     .name {
         font-size: 1.75rem;
     }
@@ -479,6 +501,12 @@ body {
 
 /* Print Styles */
 @media print {
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border: 2px solid var(--text-primary);
+    }
+    
     .hero {
         background: white;
         color: var(--text-primary);
