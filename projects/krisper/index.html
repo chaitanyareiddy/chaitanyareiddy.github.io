@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Krisper — AI Regulatory Intelligence Copilot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: #222222;
+      --fg: #f0f0f0;
+      --muted: #888888;
+      --accent: #ffffff;
+      --tag-bg: #1a1a1a;
+      --green: #4ade80;
+      --blue: #60a5fa;
+      --yellow: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* HERO */
+    .hero {
+      padding: 140px 40px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; }
+    h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .hero-meta {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .hero-meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); }
+    .hero-meta-value { font-size: 13px; font-weight: 500; color: var(--fg); }
+
+    /* STAT STRIP */
+    .stat-strip {
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-item {
+      padding: 32px 40px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-size: 36px; font-weight: 700; letter-spacing: -0.03em; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; letter-spacing: 0.04em; }
+
+    /* MAIN LAYOUT */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* SECTION */
+    .section {
+      padding: 64px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header {
+      display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px;
+    }
+    .section-num { font-size: 12px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; min-width: 40px; }
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--accent);
+    }
+
+    /* TWO COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul { list-style: none; padding: 0; margin-bottom: 12px; }
+    li {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 6px 0 6px 16px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    li:first-child { border-top: 1px solid var(--border); }
+    li::before { content: "→"; position: absolute; left: 0; color: var(--muted); font-size: 12px; }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .card h3 { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+
+    /* METRIC ROWS */
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-key { color: var(--muted); }
+    .metric-val { color: var(--fg); font-weight: 500; }
+
+    /* NORTH STAR BLOCK */
+    .north-star {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .north-star::before {
+      content: "NORTH STAR";
+      position: absolute;
+      top: 16px; right: 20px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--border);
+    }
+    .north-star-metric {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    /* ASSUMPTION BLOCKS */
+    .assumption {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+    }
+    .assumption-num {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .assumption-title { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 8px; }
+    .assumption-row { display: flex; gap: 24px; margin-top: 10px; }
+    .assumption-item { flex: 1; }
+    .assumption-item-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .assumption-item-val { font-size: 13px; color: var(--muted); }
+
+    /* PHASE */
+    .phase {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .phase-label {
+      font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--muted); margin-bottom: 8px;
+    }
+    .phase-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
+
+    /* AB TEST */
+    .ab-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 16px; }
+    .ab-cell {
+      background: var(--surface2);
+      padding: 16px;
+      font-size: 13px;
+    }
+    .ab-cell-label {
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.16em; color: var(--muted); margin-bottom: 6px;
+    }
+    .ab-cell-val { color: var(--muted); }
+
+    /* IMPACT MODEL */
+    .impact-bar-row { margin: 20px 0; }
+    .impact-bar-label {
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: var(--muted); margin-bottom: 6px;
+    }
+    .impact-bar-track {
+      height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+    }
+    .impact-bar-fill {
+      height: 100%; background: var(--fg); border-radius: 2px;
+    }
+
+    /* TRADEOFF */
+    .tradeoff-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .tradeoff-title {
+      font-size: 13px; font-weight: 600;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .tradeoff-vs {
+      font-size: 11px; color: var(--muted); margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    /* PILLS */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .pill {
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    /* REFLECTION */
+    .reflection-block {
+      border-left: 2px solid var(--fg);
+      padding: 8px 0 8px 24px;
+    }
+    .reflection-block p {
+      font-size: 18px;
+      color: var(--fg);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    /* FOOTNOTE */
+    .footnote { font-size: 11px !important; color: #555 !important; margin-top: 12px; }
+
+    /* DIVIDER LABEL */
+    .divider-label {
+      font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.2em; color: var(--muted);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      .stat-strip { grid-template-columns: 1fr 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .section { padding: 48px 20px; }
+      .two-col, .three-col, .ab-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../../index.html" class="nav-logo" style="text-decoration: none;">← Portfolio</a>
+    <div class="nav-links">
+      <a href="#context">Context</a>
+      <a href="#problem">Problem</a>
+      <a href="#metrics">Metrics</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#impact">Impact</a>
+      <a href="#governance">Governance</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><span></span>Case Study · AI Product Management</div>
+    <h1>Krisper — AI Regulatory Intelligence Copilot</h1>
+    <p class="hero-sub">Designing a governance-ready, analytics-driven AI copilot for regulated teams where every answer must be traceable, cited, and defensible.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Role</span>
+        <span class="hero-meta-value">Product Manager</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Focus</span>
+        <span class="hero-meta-value">AI · RAG · Governance</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Stage</span>
+        <span class="hero-meta-value">MVP → Early Adoption</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Domain</span>
+        <span class="hero-meta-value">Regulatory Affairs · Pharma</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip">
+    <div class="stat-item">
+      <div class="stat-number">≥30%</div>
+      <div class="stat-label">Reduction in Time-to-Verified-Answer</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">600+</div>
+      <div class="stat-label">Hours Saved Monthly (100 users)</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">12–15%</div>
+      <div class="stat-label">Baseline Rework Rate Targeted</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Core MVP Assumptions Tested</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- 01 CONTEXT -->
+    <div class="section" id="context">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Context</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <p>Regulatory teams operate in environments where each answer may be revisited by auditors, inspectors, and review boards months or years later. Decisions must be traceable, explainable, and defensible.</p>
+          <p>Generic AI tools optimize for conversational speed. Regulated teams optimize for verified evidence chains, scoping, and governance. The real bottleneck is not intelligence — it is time-to-verified-answer.</p>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-label">The Core Tension</div>
+            <div class="metric-row">
+              <span class="metric-key">Generic AI optimizes for</span>
+              <span class="metric-val">Speed · Fluency</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Regulated teams optimize for</span>
+              <span class="metric-val">Verification · Traceability</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Real bottleneck</span>
+              <span class="metric-val">Time-to-Verified-Answer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 PROBLEM -->
+    <div class="section" id="problem">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Problem Quantification</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <p>Through discovery with regulatory affairs and safety teams, I modeled the current workflow for answering submission, labeling, and guidance-related questions.</p>
+          <ul>
+            <li>Average document retrieval time per query: 18–25 minutes</li>
+            <li>Each answer requires 3–5 documents cross-referenced</li>
+            <li>12–15% of outputs require rework due to unclear citations</li>
+            <li>Heavy SME dependency creates coordination bottlenecks</li>
+          </ul>
+          <p class="footnote">Modeled assumptions grounded in discovery interviews and workflow shadowing — not marketing estimates.</p>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-label">Workflow Cost Model</div>
+            <div class="metric-row">
+              <span class="metric-key">Effort per complex query</span>
+              <span class="metric-val">45–90 min</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Rework rate</span>
+              <span class="metric-val">12–15%</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">SME touchpoints per query</span>
+              <span class="metric-val">1–3</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Docs cross-referenced</span>
+              <span class="metric-val">3–5</span>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <div class="impact-bar-row">
+              <div class="impact-bar-label"><span>Search & Retrieval</span><span>40%</span></div>
+              <div class="impact-bar-track"><div class="impact-bar-fill" style="width:40%"></div></div>
+            </div>
+            <div class="impact-bar-row">
+              <div class="impact-bar-label"><span>Cross-referencing</span><span>30%</span></div>
+              <div class="impact-bar-track"><div class="impact-bar-fill" style="width:30%"></div></div>
+            </div>
+            <div class="impact-bar-row">
+              <div class="impact-bar-label"><span>SME Review</span><span>20%</span></div>
+              <div class="impact-bar-track"><div class="impact-bar-fill" style="width:20%"></div></div>
+            </div>
+            <div class="impact-bar-row">
+              <div class="impact-bar-label"><span>Rework</span><span>10%</span></div>
+              <div class="impact-bar-track"><div class="impact-bar-fill" style="width:10%"></div></div>
+            </div>
+            <p class="footnote" style="margin-top:8px">Estimated time distribution across a typical regulatory query workflow</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 HYPOTHESIS -->
+    <div class="section" id="hypothesis">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Hypothesis</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <p>If we redesign regulatory search around time-to-verified-answer, we can materially improve productivity and governance without sacrificing control.</p>
+          <div class="divider-label" style="margin-top:24px">Interventions</div>
+          <ul>
+            <li>Citation-grounded RAG with line-level references</li>
+            <li>Confidence scoring on each answer</li>
+            <li>Scoped document search by jurisdiction and product</li>
+            <li>Human-in-the-loop validation and override workflow</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-label">Expected Outcomes</div>
+            <div class="metric-row">
+              <span class="metric-key">Time-to-Verified-Answer</span>
+              <span class="metric-val">↓ ≥30%</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Citation rework rate</span>
+              <span class="metric-val">↓ Materially</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">SME dependency</span>
+              <span class="metric-val">↓ Edge cases only</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">User trust + adoption</span>
+              <span class="metric-val">↑ Via evidence visibility</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 METRICS -->
+    <div class="section" id="metrics">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Metrics Architecture</h2>
+      </div>
+
+      <div class="north-star">
+        <div class="card-label">North Star Metric</div>
+        <div class="north-star-metric">Time-to-Verified-Answer (TVA)</div>
+        <p style="max-width:600px">Elapsed time from query submission to a human marking the answer as verified for use in a submission, response letter, or internal decision. Captures both system performance and human validation friction.</p>
+      </div>
+
+      <div class="three-col">
+        <div class="card">
+          <div class="card-label">Activation</div>
+          <p style="font-size:12px;margin-bottom:12px">Are users onboarding with the right corpus?</p>
+          <div class="metric-row"><span class="metric-key">First upload completion</span><span class="metric-val">%</span></div>
+          <div class="metric-row"><span class="metric-key">First cited query success</span><span class="metric-val">Rate</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Engagement</div>
+          <p style="font-size:12px;margin-bottom:12px">Are users relying on cited answers?</p>
+          <div class="metric-row"><span class="metric-key">Queries per session</span><span class="metric-val">By role</span></div>
+          <div class="metric-row"><span class="metric-key">Citation click-through</span><span class="metric-val">Rate</span></div>
+          <div class="metric-row"><span class="metric-key">Session frequency</span><span class="metric-val">Weekly</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Trust & Retention</div>
+          <p style="font-size:12px;margin-bottom:12px">Are we trusted in critical workflows?</p>
+          <div class="metric-row"><span class="metric-key">Confidence score interaction</span><span class="metric-val">Rate</span></div>
+          <div class="metric-row"><span class="metric-key">Human override rate</span><span class="metric-val">Frequency</span></div>
+          <div class="metric-row"><span class="metric-key">Query return rate</span><span class="metric-val">Weekly</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 MVP VALIDATION -->
+    <div class="section" id="mvp">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>MVP Data Validation Strategy</h2>
+      </div>
+      <p style="margin-bottom:32px">The MVP was designed to validate or falsify three core assumptions before scaling to broader workflows and integrations.</p>
+
+      <div class="assumption">
+        <div class="assumption-num">Assumption 01</div>
+        <div class="assumption-title">Citation visibility increases trust</div>
+        <div class="assumption-row">
+          <div class="assumption-item">
+            <div class="assumption-item-label">Mechanism</div>
+            <div class="assumption-item-val">Inline citations with deep links into source documents</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Measurement</div>
+            <div class="assumption-item-val">Citation click-through rate + verified answers with opened citations</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Validation Signal</div>
+            <div class="assumption-item-val">Higher verification when citations inspected = trust driver confirmed</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="assumption">
+        <div class="assumption-num">Assumption 02</div>
+        <div class="assumption-title">Scoped retrieval improves precision</div>
+        <div class="assumption-row">
+          <div class="assumption-item">
+            <div class="assumption-item-label">Mechanism</div>
+            <div class="assumption-item-val">User- and admin-defined scoped collections by jurisdiction and product</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Measurement</div>
+            <div class="assumption-item-val">Answer acceptance rate — scoped vs. global search</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Validation Signal</div>
+            <div class="assumption-item-val">Uplift in acceptance validates scoping investment</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="assumption">
+        <div class="assumption-num">Assumption 03</div>
+        <div class="assumption-title">Confidence scoring reduces risk</div>
+        <div class="assumption-row">
+          <div class="assumption-item">
+            <div class="assumption-item-label">Mechanism</div>
+            <div class="assumption-item-val">Confidence bands tied to citation density, recency, and source type</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Measurement</div>
+            <div class="assumption-item-val">Human override frequency across confidence bands</div>
+          </div>
+          <div class="assumption-item">
+            <div class="assumption-item-label">Validation Signal</div>
+            <div class="assumption-item-val">Low-confidence answers overridden more = confidence is a risk triage tool</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 EXPERIMENTS -->
+    <div class="section" id="experiments">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Experimentation Plan</h2>
+      </div>
+      <div class="two-col" style="margin-bottom:24px">
+        <div class="phase">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-title">Document Upload + RAG Retrieval</div>
+          <p>Prove that teams can ingest their corpus and get cited answers that outperform existing search tools.</p>
+          <ul style="margin-top:12px">
+            <li>Core flows for repository connection and upload</li>
+            <li>Scoped collection creation per product and jurisdiction</li>
+            <li>Measured TVA, acceptance rate, and retention over 2–4 weeks</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-title">Confidence Scoring + A/B Test</div>
+          <p>Measure how exposing confidence affects trust, override behavior, and adoption.</p>
+          <div class="ab-row">
+            <div class="ab-cell">
+              <div class="ab-cell-label">Variant A</div>
+              <div class="ab-cell-val">Confidence scores + explanations visible</div>
+            </div>
+            <div class="ab-cell">
+              <div class="ab-cell-label">Variant B</div>
+              <div class="ab-cell-val">Confidence hidden; citations and scopes intact</div>
+            </div>
+          </div>
+          <p style="margin-top:12px;font-size:12px">Measured: trust perception via micro-surveys, override rate, adoption lift, TVA delta</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 IMPACT -->
+    <div class="section" id="impact">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Business Impact Model</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="divider-label">Assumptions</div>
+          <div class="metric-row">
+            <span class="metric-key">Research hours per user/week</span>
+            <span class="metric-val">~20 hrs</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">TVA reduction (modeled)</span>
+            <span class="metric-val">~30%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Hours saved per user/week</span>
+            <span class="metric-val">~6 hrs</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Team size modeled</span>
+            <span class="metric-val">100 users</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Hours saved monthly</span>
+            <span class="metric-val">600+ hrs</span>
+          </div>
+          <p class="footnote">Modeled projection for product and pricing decisions. Not live production ROI.</p>
+        </div>
+        <div>
+          <div class="divider-label" style="margin-bottom:20px">Impact Distribution</div>
+          <div class="impact-bar-row">
+            <div class="impact-bar-label"><span>Faster Document Retrieval</span><span>45%</span></div>
+            <div class="impact-bar-track"><div class="impact-bar-fill" style="width:45%"></div></div>
+          </div>
+          <div class="impact-bar-row">
+            <div class="impact-bar-label"><span>Reduced Rework</span><span>25%</span></div>
+            <div class="impact-bar-track"><div class="impact-bar-fill" style="width:25%"></div></div>
+          </div>
+          <div class="impact-bar-row">
+            <div class="impact-bar-label"><span>Lower SME Dependency</span><span>20%</span></div>
+            <div class="impact-bar-track"><div class="impact-bar-fill" style="width:20%"></div></div>
+          </div>
+          <div class="impact-bar-row">
+            <div class="impact-bar-label"><span>Compliance Risk Reduction</span><span>10%</span></div>
+            <div class="impact-bar-track"><div class="impact-bar-fill" style="width:10%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 GOVERNANCE -->
+    <div class="section" id="governance">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2>Trade-offs & Governance</h2>
+      </div>
+      <p style="margin-bottom:32px">Designing regulated AI requires explicit trade-offs rather than chasing generic intelligence. Every constraint is a deliberate governance decision.</p>
+      <div class="three-col">
+        <div class="tradeoff-card">
+          <div class="tradeoff-title">Constrained answers</div>
+          <div class="tradeoff-vs">vs. Flexible generation</div>
+          <p>Answers are limited to cited, in-scope documents. Less creative — but outputs stay within the validated corpus and pass audit scrutiny.</p>
+        </div>
+        <div class="tradeoff-card">
+          <div class="tradeoff-title">Auditability</div>
+          <div class="tradeoff-vs">vs. Conversational freedom</div>
+          <p>Interactions are structured and logged, not ephemeral chat. Every decision can be reconstructed and reviewed months later.</p>
+        </div>
+        <div class="tradeoff-card">
+          <div class="tradeoff-title">Trust over speed</div>
+          <div class="tradeoff-vs">vs. Raw throughput</div>
+          <p>Verification checkpoints add friction intentionally. Deliberate checks reduce downstream rework and compliance risk at submission time.</p>
+        </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill">Scoped Retrieval Boundaries</div>
+        <div class="pill">Audit Logs</div>
+        <div class="pill">Human Validation Workflow</div>
+        <div class="pill">Confidence Bands</div>
+        <div class="pill">Override Tracking</div>
+      </div>
+    </div>
+
+    <!-- 09 REFLECTION -->
+    <div class="section" id="reflection">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2>Reflection</h2>
+      </div>
+      <div class="reflection-block">
+        <p>In regulated AI, optimization is not the goal. Accountability is.</p>
+        <p style="margin-top:16px">The strongest AI systems are not the most expressive. They are the most traceable.</p>
+      </div>
+      <p style="margin-top:32px; max-width:600px">Krisper is a deliberate exercise in treating AI as infrastructure for accountable decision-making. Every design decision — from scoped retrieval to confidence scoring to human overrides — exists to make the system trustworthy in the moments that matter most.</p>
+    </div>
+
+  </div>
+</body>
+</html>
