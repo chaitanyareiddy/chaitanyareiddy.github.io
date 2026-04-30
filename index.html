@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaitanya Reddy — AI × Pharma × People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;900&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #050a0f;
+  --bg2:      #080f17;
+  --bg3:      #0c1520;
+  --navy:     #0a1628;
+  --teal:     #00c9a7;
+  --teal2:    #00e5c0;
+  --teal-dim: rgba(0,201,167,0.12);
+  --teal-glow:rgba(0,201,167,0.06);
+  --gold:     #f0a500;
+  --gold-dim: rgba(240,165,0,0.12);
+  --violet:   #7c6fff;
+  --violet-dim:rgba(124,111,255,0.12);
+  --coral:    #ff6b6b;
+  --white:    #e8f4f0;
+  --muted:    #2a4040;
+  --dim:      #4a7070;
+  --text:     #a8ccc8;
+  --mono:     'DM Mono', monospace;
+  --sans:     'Outfit', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ══════════════ CANVAS BG ══════════════ */
+#canvas-bg{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+}
+
+/* ══════════════ NAV ══════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:60px;
+  background:rgba(5,10,15,0.7);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(0,201,167,0.07);
+  transition:background 0.4s;
+}
+.nav-brand{
+  font-family:var(--sans);font-weight:700;font-size:14px;
+  color:var(--white);letter-spacing:0.04em;
+}
+.nav-brand span{color:var(--teal)}
+.nav-pills{display:flex;gap:6px}
+.nav-pill{
+  font-size:11px;letter-spacing:0.08em;
+  padding:5px 14px;border-radius:100px;
+  color:var(--dim);text-decoration:none;
+  transition:all 0.25s;border:1px solid transparent;
+}
+.nav-pill:hover,.nav-pill.active{
+  color:var(--teal);border-color:rgba(0,201,167,0.3);
+  background:var(--teal-dim);
+}
+.nav-cta{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.1em;
+  color:var(--bg);background:var(--teal);
+  padding:8px 20px;text-decoration:none;
+  border-radius:4px;transition:opacity 0.2s;
+}
+.nav-cta:hover{opacity:0.85}
+
+/* ══════════════ HERO ══════════════ */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:120px 48px 80px;
+  overflow:hidden;
+}
+.hero-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.2em;
+  color:var(--teal);margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;justify-content:center;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';width:40px;height:1px;background:rgba(0,201,167,0.4);
+}
+.hero-name{
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(52px,8vw,100px);
+  color:var(--white);line-height:0.95;
+  letter-spacing:-0.03em;margin-bottom:8px;
+}
+.hero-name .line2{
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(0,201,167,0.6);
+}
+.hero-role{
+  font-family:var(--mono);font-size:13px;letter-spacing:0.12em;
+  color:var(--dim);margin-bottom:32px;margin-top:12px;
+}
+.hero-tagline{
+  font-size:clamp(18px,2.5vw,26px);font-weight:300;
+  color:var(--white);max-width:700px;margin:0 auto 48px;
+  line-height:1.5;
+}
+.hero-tagline strong{font-weight:700;color:var(--teal)}
+.hero-nodes{
+  display:flex;gap:12px;justify-content:center;
+  flex-wrap:wrap;margin-bottom:48px;
+}
+.hero-node{
+  font-size:12px;padding:8px 18px;
+  border:1px solid rgba(0,201,167,0.15);
+  color:var(--text);border-radius:100px;
+  background:rgba(0,201,167,0.04);
+  transition:all 0.3s;cursor:default;
+}
+.hero-node:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-dim)}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-a{
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  color:var(--bg);background:var(--teal);
+  padding:12px 28px;border-radius:6px;text-decoration:none;
+  transition:all 0.25s;letter-spacing:0.02em;
+}
+.btn-a:hover{background:var(--teal2);transform:translateY(-1px)}
+.btn-b{
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  color:var(--teal);border:1px solid rgba(0,201,167,0.3);
+  padding:12px 28px;border-radius:6px;text-decoration:none;
+  transition:all 0.25s;background:transparent;
+}
+.btn-b:hover{background:var(--teal-dim);transform:translateY(-1px)}
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:0.15em;
+}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(0,201,167,0.5),transparent);animation:scrollpulse 2s ease-in-out infinite}
+@keyframes scrollpulse{0%,100%{opacity:0.3;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ══════════════ JOURNEY WRAPPER ══════════════ */
+.journey{position:relative;z-index:1}
+
+/* Stage dividers */
+.stage{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:100px 48px;
+  max-width:1300px;margin:0 auto;
+  position:relative;
+}
+
+/* Stage label */
+.stage-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.25em;
+  margin-bottom:20px;display:flex;align-items:center;gap:12px;
+}
+.stage-label .num{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;
+  border:1px solid currentColor;flex-shrink:0;
+}
+.stage-title{
+  font-family:var(--sans);font-weight:800;
+  font-size:clamp(36px,5vw,64px);
+  color:var(--white);line-height:1.05;
+  letter-spacing:-0.02em;margin-bottom:16px;
+}
+.stage-sub{
+  font-size:16px;font-weight:300;color:var(--text);
+  max-width:580px;line-height:1.8;margin-bottom:60px;
+}
+
+/* ══════════════ STAGE 1 — IDENTITY ══════════════ */
+#stage1 .stage-label{color:var(--teal)}
+.identity-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+}
+.id-card{
+  background:var(--bg2);
+  border:1px solid rgba(0,201,167,0.08);
+  border-radius:12px;padding:28px;
+  transition:all 0.4s;position:relative;overflow:hidden;
+}
+.id-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,var(--teal-dim),transparent 60%);
+  opacity:0;transition:opacity 0.4s;
+}
+.id-card:hover{border-color:rgba(0,201,167,0.25);transform:translateY(-4px)}
+.id-card:hover::after{opacity:1}
+.id-card.wide{grid-column:span 2}
+.id-icon{font-size:28px;margin-bottom:14px}
+.id-title{font-weight:700;font-size:18px;color:var(--white);margin-bottom:8px}
+.id-body{font-size:13px;color:var(--dim);line-height:1.8}
+.id-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.id-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;border:1px solid var(--muted);color:var(--dim)}
+.id-stat{font-family:var(--sans);font-size:48px;font-weight:900;color:var(--teal);line-height:1}
+.id-stat-label{font-family:var(--mono);font-size:10px;letter-spacing:0.15em;color:var(--dim);margin-top:4px}
+.personality-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.personality-row:last-child{border:none}
+.pr-k{color:var(--dim)}
+.pr-v{color:var(--teal);font-weight:500}
+
+/* ══════════════ STAGE 2 — PHARMA PIPELINE ══════════════ */
+#stage2 .stage-label{color:var(--gold)}
+
+.pipeline-wrap{
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+}
+/* Vertical connector line */
+.pipeline-wrap::before{
+  content:'';position:absolute;
+  left:30px;top:40px;bottom:40px;
+  width:2px;
+  background:linear-gradient(to bottom,var(--gold),rgba(240,165,0,0.1));
+}
+.pipe-stage{
+  display:grid;
+  grid-template-columns:60px 1fr 1fr;
+  gap:0 32px;
+  align-items:start;
+  padding:20px 0;
+  position:relative;
+}
+.pipe-node{
+  width:60px;height:60px;border-radius:50%;
+  border:2px solid var(--gold);
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+  position:relative;z-index:2;
+  transition:all 0.3s;cursor:default;
+  box-shadow:0 0 0 0 rgba(240,165,0,0);
+}
+.pipe-node:hover{
+  background:var(--gold-dim);
+  box-shadow:0 0 20px rgba(240,165,0,0.2);
+}
+.pipe-info{padding-top:8px}
+.pipe-title{font-weight:700;font-size:16px;color:var(--white);margin-bottom:4px}
+.pipe-desc{font-size:13px;color:var(--dim);line-height:1.7}
+.pipe-meta{padding-top:8px}
+.pipe-chip{
+  display:inline-block;font-family:var(--mono);font-size:10px;
+  letter-spacing:0.08em;padding:4px 12px;border-radius:100px;
+  border:1px solid rgba(240,165,0,0.25);
+  color:rgba(240,165,0,0.8);background:var(--gold-dim);
+  margin:3px 3px 3px 0;
+}
+.ai-layer{
+  background:rgba(124,111,255,0.07);
+  border:1px solid rgba(124,111,255,0.2);
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:rgba(124,111,255,0.9);
+  display:flex;align-items:center;gap:8px;
+  margin-top:8px;
+}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--violet);animation:pulse-ai 2s infinite}
+@keyframes pulse-ai{0%,100%{opacity:0.4;transform:scale(0.8)}50%{opacity:1;transform:scale(1.1)}}
+
+/* ══════════════ STAGE 3 — AI LAYER ══════════════ */
+#stage3 .stage-label{color:var(--violet)}
+
+.ai-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.ai-card{
+  background:var(--bg2);
+  border:1px solid rgba(124,111,255,0.1);
+  border-radius:12px;padding:28px;
+  transition:all 0.4s;position:relative;overflow:hidden;
+}
+.ai-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--violet),transparent);
+  opacity:0;transition:opacity 0.4s;
+}
+.ai-card:hover{border-color:rgba(124,111,255,0.3);transform:translateY(-3px)}
+.ai-card:hover::before{opacity:1}
+.ai-card.full{grid-column:span 2}
+.ai-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.15em;
+  color:var(--violet);margin-bottom:12px;
+}
+.ai-title{font-weight:700;font-size:20px;color:var(--white);margin-bottom:10px;line-height:1.3}
+.ai-body{font-size:13px;color:var(--dim);line-height:1.8}
+.ai-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.ai-chip{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.05em;
+  padding:4px 12px;border-radius:100px;
+  border:1px solid rgba(124,111,255,0.25);
+  color:rgba(124,111,255,0.8);background:var(--violet-dim);
+}
+/* Philosophy grid */
+.phi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.phi-item{text-align:center;padding:20px 16px;border:1px solid rgba(124,111,255,0.1);border-radius:8px}
+.phi-icon{font-size:24px;margin-bottom:10px}
+.phi-label{font-size:12px;color:var(--white);font-weight:600;margin-bottom:4px}
+.phi-desc{font-size:11px;color:var(--dim);line-height:1.6}
+
+/* ══════════════ STAGE 4 — TRANSFORMATION ══════════════ */
+#stage4 .stage-label{color:var(--coral)}
+
+.transform-hero{
+  text-align:center;padding:80px 0 60px;
+}
+.transform-quote{
+  font-size:clamp(22px,3.5vw,40px);
+  font-weight:200;color:var(--white);
+  max-width:800px;margin:0 auto 48px;
+  line-height:1.4;font-style:italic;
+}
+.transform-quote strong{font-weight:900;font-style:normal;color:var(--teal);display:block;margin-top:8px;font-size:1.1em}
+.outcome-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.08);
+  border-radius:12px;overflow:hidden;margin-bottom:60px;
+}
+.outcome-cell{
+  background:var(--bg);padding:28px 24px;
+  transition:background 0.3s;
+}
+.outcome-cell:hover{background:var(--bg2)}
+.oc-num{
+  font-family:var(--sans);font-size:40px;font-weight:900;
+  color:var(--coral);line-height:1;margin-bottom:6px;
+}
+.oc-label{font-size:12px;color:var(--dim);line-height:1.6}
+
+/* ══════════════ CASE STUDIES ══════════════ */
+#projects .stage-label{color:var(--teal)}
+.projects-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:16px;
+}
+.project-card{
+  border-radius:12px;overflow:hidden;
+  border:1px solid rgba(0,201,167,0.1);
+  background:var(--bg2);
+  transition:all 0.4s;
+  position:relative;
+}
+.project-card:hover{border-color:rgba(0,201,167,0.3);transform:translateY(-4px)}
+.project-card.featured{grid-row:span 2}
+.pc-top{padding:28px;flex:1}
+.pc-badge{
+  display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:0.15em;
+  padding:4px 12px;border-radius:100px;margin-bottom:14px;
+}
+.badge-live{background:rgba(0,201,167,0.15);color:var(--teal);border:1px solid rgba(0,201,167,0.3)}
+.badge-next{background:rgba(255,107,107,0.1);color:var(--coral);border:1px solid rgba(255,107,107,0.2)}
+.badge-future{background:rgba(240,165,0,0.1);color:var(--gold);border:1px solid rgba(240,165,0,0.2)}
+.pc-title{font-weight:800;font-size:22px;color:var(--white);margin-bottom:8px;line-height:1.2}
+.pc-sub{font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:16px}
+.pc-stats{display:flex;gap:20px;flex-wrap:wrap}
+.pc-stat{font-family:var(--mono);font-size:11px}
+.pc-stat span{display:block;color:var(--teal);font-size:18px;font-weight:700;font-family:var(--sans)}
+.pc-footer{
+  border-top:1px solid rgba(0,201,167,0.06);
+  padding:16px 28px;display:flex;justify-content:space-between;align-items:center;
+}
+.pc-tags{display:flex;gap:6px;flex-wrap:wrap}
+.pc-tag{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:100px;border:1px solid var(--muted);color:var(--dim)}
+.pc-link{font-size:12px;color:var(--teal);text-decoration:none;font-weight:600;white-space:nowrap}
+.pc-link:hover{text-decoration:underline}
+.project-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px;
+  border:1px dashed rgba(0,201,167,0.15);border-radius:12px;
+  min-height:160px;
+  background:var(--bg2);
+  transition:all 0.3s;cursor:default;
+}
+.project-placeholder:hover{border-color:rgba(0,201,167,0.3);background:var(--teal-glow)}
+.pp-icon{font-size:24px;margin-bottom:10px;opacity:0.4}
+.pp-text{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ══════════════ BLOG ══════════════ */
+#blog .stage-label{color:var(--gold)}
+.blog-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.blog-item{
+  background:var(--bg2);border:1px solid rgba(240,165,0,0.08);
+  border-radius:10px;padding:24px;text-decoration:none;display:block;
+  transition:all 0.35s;
+}
+.blog-item:hover{border-color:rgba(240,165,0,0.3);transform:translateY(-3px)}
+.bi-date{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--gold);opacity:0.7;margin-bottom:10px}
+.bi-title{font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px;line-height:1.4}
+.bi-excerpt{font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:14px}
+.bi-read{font-size:11px;color:var(--gold);font-weight:600}
+.bi-read::after{content:' →'}
+
+/* ══════════════ CONSULT ══════════════ */
+#consult{
+  position:relative;z-index:1;
+  padding:120px 48px;
+  max-width:1300px;margin:0 auto;
+}
+.consult-hero-text{
+  text-align:center;margin-bottom:64px;
+}
+.consult-title{
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(36px,5vw,64px);
+  color:var(--white);line-height:1.05;letter-spacing:-0.02em;margin-bottom:16px;
+}
+.consult-sub{font-size:16px;font-weight:300;color:var(--text);max-width:540px;margin:0 auto 36px;line-height:1.8}
+
+.offerings{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+.offering{
+  border:1px solid rgba(0,201,167,0.1);border-radius:12px;
+  padding:32px;background:var(--bg2);
+  transition:all 0.35s;position:relative;overflow:hidden;
+}
+.offering.highlight{border-color:rgba(0,201,167,0.35);background:rgba(0,201,167,0.04)}
+.offering:hover{border-color:rgba(0,201,167,0.3);transform:translateY(-3px)}
+.offering-tier{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--teal);margin-bottom:20px}
+.offering-price{font-family:var(--sans);font-size:36px;font-weight:900;color:var(--white);margin-bottom:4px}
+.offering-cadence{font-size:12px;color:var(--dim);margin-bottom:16px}
+.offering-name{font-weight:700;font-size:18px;color:var(--white);margin-bottom:10px}
+.offering-desc{font-size:13px;color:var(--dim);line-height:1.8}
+
+/* ══════════════ FOOTER ══════════════ */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid rgba(0,201,167,0.07);
+  padding:40px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;color:var(--dim);
+}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:var(--dim);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--teal)}
+
+/* ══════════════ SECTION DIVIDER ══════════════ */
+.divider{
+  max-width:1300px;margin:0 auto;
+  border:none;border-top:1px solid rgba(0,201,167,0.05);
+}
+
+/* ══════════════ REVEAL ANIMATIONS ══════════════ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+.reveal-delay-5{transition-delay:0.5s}
+</style>
+</head>
+<body>
+
+<!-- CANVAS BACKGROUND -->
+<canvas id="canvas-bg"></canvas>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-brand"><span>~/</span>chaitanya.reddy</div>
+  <div class="nav-pills">
+    <a href="#stage1" class="nav-pill">Identity</a>
+    <a href="#stage2" class="nav-pill">Pharma</a>
+    <a href="#stage3" class="nav-pill">AI Layer</a>
+    <a href="#stage4" class="nav-pill">Impact</a>
+    <a href="#projects" class="nav-pill">Work</a>
+    <a href="#consult" class="nav-pill">Consult</a>
+  </div>
+  <a href="#consult" class="nav-cta">Let's talk</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-eyebrow">OPEN TO WORK · BC CANADA · AI PM + CSM</div>
+  <h1 class="hero-name">
+    <div>Chaitanya</div>
+    <div class="line2">Reddy</div>
+  </h1>
+  <div class="hero-role">PRODUCT · AI · PHARMACEUTICAL · PEOPLE</div>
+  <p class="hero-tagline">
+    I bridge <strong>human complexity</strong> and intelligent systems —
+    turning pharmaceutical challenges into AI-powered solutions
+    that actually work in the real world.
+  </p>
+  <div class="hero-nodes">
+    <div class="hero-node">💊 Pharma Domain</div>
+    <div class="hero-node">🧬 Regulatory · FDA · EMA · ICH</div>
+    <div class="hero-node">🤖 AI Builder</div>
+    <div class="hero-node">⚙ Agentic Workflows</div>
+    <div class="hero-node">🤝 People-First</div>
+    <div class="hero-node">🎓 UofT PM Bootcamp</div>
+  </div>
+  <div class="hero-ctas">
+    <a href="#stage2" class="btn-a">Enter the journey ↓</a>
+    <a href="#projects" class="btn-b">See my work</a>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="journey">
+
+<!-- ══ STAGE 1: IDENTITY ══ -->
+<section class="stage" id="stage1">
+  <div class="stage-label reveal" style="color:var(--teal)">
+    <span class="num" style="border-color:var(--teal);color:var(--teal)">01</span>
+    IDENTITY — WHO I AM
+  </div>
+  <h2 class="stage-title reveal reveal-delay-1">A connector of people,<br>data, and ideas.</h2>
+  <p class="stage-sub reveal reveal-delay-2">
+    Not just a PM. Not just a technologist. I'm the person who walks into a room full of scientists, regulators, engineers, and executives — and translates between all of them.
+  </p>
+
+  <div class="identity-grid">
+    <div class="id-card wide reveal reveal-delay-1">
+      <div class="id-icon">🧠</div>
+      <div class="id-title">People-first professional</div>
+      <div class="id-body">
+        Strong consultative instincts, natural deal-closer, empathetic communicator. I've supervised customer teams, managed compliance-heavy workflows, built AI products from zero — and kept the human element front and center in all of it.
+      </div>
+      <div style="margin-top:20px">
+        <div class="personality-row"><span class="pr-k">background</span><span class="pr-v">Pharmacy → BA → PM → AI Builder</span></div>
+        <div class="personality-row"><span class="pr-k">style</span><span class="pr-v">Consultative · Persuasive · Empathetic</span></div>
+        <div class="personality-row"><span class="pr-k">strength</span><span class="pr-v">Translating complexity into clarity</span></div>
+        <div class="personality-row"><span class="pr-k">currently</span><span class="pr-v">UofT PM Bootcamp 2025–26 · Active job search</span></div>
+        <div class="personality-row"><span class="pr-k">location</span><span class="pr-v">BC, Canada · Open to remote</span></div>
+      </div>
+    </div>
+
+    <div class="id-card reveal reveal-delay-2">
+      <div class="id-stat">3+</div>
+      <div class="id-stat-label">YEARS IN AI PRODUCT</div>
+      <div style="height:16px"></div>
+      <div class="id-stat">5+</div>
+      <div class="id-stat-label">YEARS CONSULTING & CSM</div>
+      <div style="height:16px"></div>
+      <div class="id-stat">1</div>
+      <div class="id-stat-label">AI PRODUCT SHIPPED SOLO (KRISPER)</div>
+    </div>
+
+    <div class="id-card reveal reveal-delay-3">
+      <div class="id-icon">🎓</div>
+      <div class="id-title">Credentials</div>
+      <div class="id-tags" style="flex-direction:column;gap:8px">
+        <div class="id-tag" style="border-radius:6px;padding:8px 12px;font-size:11px">☁ AWS AI Certified</div>
+        <div class="id-tag" style="border-radius:6px;padding:8px 12px;font-size:11px">⚙ Databricks GenAI Certified</div>
+        <div class="id-tag" style="border-radius:6px;padding:8px 12px;font-size:11px">📐 UofT PM Bootcamp 2025–26</div>
+        <div class="id-tag" style="border-radius:6px;padding:8px 12px;font-size:11px">💊 Pharmacy Background</div>
+      </div>
+    </div>
+
+    <div class="id-card reveal reveal-delay-2">
+      <div class="id-icon">🌐</div>
+      <div class="id-title">Domain fluency</div>
+      <div class="id-tags">
+        <span class="id-tag" style="color:var(--teal);border-color:rgba(0,201,167,0.3)">Pharma</span>
+        <span class="id-tag" style="color:var(--teal);border-color:rgba(0,201,167,0.3)">Regulatory</span>
+        <span class="id-tag" style="color:var(--teal);border-color:rgba(0,201,167,0.3)">Biotech</span>
+        <span class="id-tag">Clinical Trials</span>
+        <span class="id-tag">Drug Discovery</span>
+        <span class="id-tag">Medical Devices</span>
+        <span class="id-tag">Post-Market</span>
+        <span class="id-tag">Power BI</span>
+        <span class="id-tag">SaaS</span>
+      </div>
+    </div>
+
+    <div class="id-card reveal reveal-delay-3">
+      <div class="id-icon">⚡</div>
+      <div class="id-title">Technical stack</div>
+      <div class="id-tags">
+        <span class="id-tag" style="color:var(--violet);border-color:rgba(124,111,255,0.3)">RAG Pipelines</span>
+        <span class="id-tag" style="color:var(--violet);border-color:rgba(124,111,255,0.3)">Agentic AI</span>
+        <span class="id-tag" style="color:var(--violet);border-color:rgba(124,111,255,0.3)">LLM Integration</span>
+        <span class="id-tag">Prompt Engineering</span>
+        <span class="id-tag">Vector DBs</span>
+        <span class="id-tag">Python</span>
+        <span class="id-tag">Automation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ STAGE 2: PHARMA PIPELINE ══ -->
+<section class="stage" id="stage2">
+  <div class="stage-label reveal" style="color:var(--gold)">
+    <span class="num" style="border-color:var(--gold);color:var(--gold)">02</span>
+    DOMAIN — THE PHARMACEUTICAL PIPELINE
+  </div>
+  <h2 class="stage-title reveal reveal-delay-1">From molecule<br>to real-world impact.</h2>
+  <p class="stage-sub reveal reveal-delay-2">
+    I understand every stage of the pharmaceutical journey — not from a textbook, but from years of working inside it. This is the pipeline I navigate, transform, and optimize.
+  </p>
+
+  <div class="pipeline-wrap">
+    <div class="pipe-stage reveal">
+      <div class="pipe-node">🔬</div>
+      <div class="pipe-info">
+        <div class="pipe-title">Drug Discovery</div>
+        <div class="pipe-desc">Target identification, lead compound selection, high-throughput screening. Where science meets hypothesis — and most ideas die.</div>
+      </div>
+      <div class="pipe-meta">
+        <span class="pipe-chip">Target ID</span>
+        <span class="pipe-chip">HTS</span>
+        <span class="pipe-chip">Compound Libraries</span>
+        <div class="ai-layer"><div class="ai-dot"></div>AI accelerates literature mining, target validation, and hit prediction at scale</div>
+      </div>
+    </div>
+
+    <div class="pipe-stage reveal reveal-delay-1">
+      <div class="pipe-node">⚗️</div>
+      <div class="pipe-info">
+        <div class="pipe-title">Preclinical & Drug Development</div>
+        <div class="pipe-desc">ADMET profiling, formulation, toxicology studies, IND preparation. Building the evidence base before human exposure.</div>
+      </div>
+      <div class="pipe-meta">
+        <span class="pipe-chip">ADMET</span>
+        <span class="pipe-chip">Toxicology</span>
+        <span class="pipe-chip">IND Filing</span>
+        <div class="ai-layer"><div class="ai-dot"></div>Predictive toxicity models reduce costly late-stage failures</div>
+      </div>
+    </div>
+
+    <div class="pipe-stage reveal reveal-delay-2">
+      <div class="pipe-node">👥</div>
+      <div class="pipe-info">
+        <div class="pipe-title">Clinical Trials (Phase I–III)</div>
+        <div class="pipe-desc">First-in-human to pivotal studies. Safety, efficacy, dosing. Managing complexity across sites, patients, protocols, and regulators simultaneously.</div>
+      </div>
+      <div class="pipe-meta">
+        <span class="pipe-chip">Protocol Design</span>
+        <span class="pipe-chip">Site Management</span>
+        <span class="pipe-chip">EDC / CTMS</span>
+        <div class="ai-layer"><div class="ai-dot"></div>AI-powered patient recruitment, protocol deviation detection, and real-time safety monitoring</div>
+      </div>
+    </div>
+
+    <div class="pipe-stage reveal reveal-delay-3">
+      <div class="pipe-node">📋</div>
+      <div class="pipe-info">
+        <div class="pipe-title">Regulatory Affairs</div>
+        <div class="pipe-desc">NDA/BLA submission, CTD compilation, FDA/EMA/ICH compliance. The stage where everything either clears — or collapses. My deepest domain.</div>
+      </div>
+      <div class="pipe-meta">
+        <span class="pipe-chip">FDA · EMA · ICH</span>
+        <span class="pipe-chip">NDA / BLA</span>
+        <span class="pipe-chip">CTD</span>
+        <div class="ai-layer" style="border-color:rgba(0,201,167,0.4);color:var(--teal);background:var(--teal-dim)"><div class="ai-dot" style="background:var(--teal)"></div><strong>KRISPER lives here</strong> — AI co-pilot for regulatory intelligence</div>
+      </div>
+    </div>
+
+    <div class="pipe-stage reveal reveal-delay-4">
+      <div class="pipe-node">📈</div>
+      <div class="pipe-info">
+        <div class="pipe-title">Post-Marketing Surveillance</div>
+        <div class="pipe-desc">Pharmacovigilance, PSUR, signal detection, real-world evidence. The work doesn't stop at approval — and neither does the risk.</div>
+      </div>
+      <div class="pipe-meta">
+        <span class="pipe-chip">Pharmacovigilance</span>
+        <span class="pipe-chip">Signal Detection</span>
+        <span class="pipe-chip">RWE</span>
+        <div class="ai-layer"><div class="ai-dot"></div>Automated adverse event mining, PSUR drafting, safety signal prioritization</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ STAGE 3: AI LAYER ══ -->
+<section class="stage" id="stage3">
+  <div class="stage-label reveal" style="color:var(--violet)">
+    <span class="num" style="border-color:var(--violet);color:var(--violet)">03</span>
+    INTELLIGENCE — THE AI LAYER
+  </div>
+  <h2 class="stage-title reveal reveal-delay-1">AI where it fits.<br>People where it doesn't.</h2>
+  <p class="stage-sub reveal reveal-delay-2">
+    I don't apply AI blindly. I know where it creates leverage, where it introduces risk, and — crucially — when to keep humans firmly in control. That judgment is rare.
+  </p>
+
+  <div class="ai-grid">
+    <div class="ai-card full reveal">
+      <div class="ai-eyebrow">MY PHILOSOPHY</div>
+      <div class="ai-title">Strategic AI, not cargo-cult AI.</div>
+      <div class="ai-body">Most teams add AI because they feel pressure to. I add it when it solves a specific, measurable problem — and I know how to design the guardrails that make it trustworthy in regulated environments like pharma.</div>
+      <div class="phi-grid">
+        <div class="phi-item">
+          <div class="phi-icon">🎯</div>
+          <div class="phi-label">Problem-first</div>
+          <div class="phi-desc">Start with the problem, not the technology. AI is the tool, not the answer.</div>
+        </div>
+        <div class="phi-item">
+          <div class="phi-icon">🏛</div>
+          <div class="phi-label">Compliance-aware</div>
+          <div class="phi-desc">Every AI decision in pharma has regulatory implications. I design with that in mind.</div>
+        </div>
+        <div class="phi-item">
+          <div class="phi-icon">🔄</div>
+          <div class="phi-label">Human-in-loop</div>
+          <div class="phi-desc">The right level of automation with the right oversight. Not everything should be autonomous.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-card reveal reveal-delay-1">
+      <div class="ai-eyebrow">WHERE I APPLY AI</div>
+      <div class="ai-title">High-leverage use cases</div>
+      <div class="ai-body">Regulatory document intelligence, protocol deviation detection, adverse event triage, literature synthesis, clinical data QC, submission drafting.</div>
+      <div class="ai-chips">
+        <span class="ai-chip">RAG</span>
+        <span class="ai-chip">Document AI</span>
+        <span class="ai-chip">Agentic workflows</span>
+        <span class="ai-chip">NLP</span>
+        <span class="ai-chip">LLM fine-tuning</span>
+      </div>
+    </div>
+
+    <div class="ai-card reveal reveal-delay-2">
+      <div class="ai-eyebrow">HOW I BUILD</div>
+      <div class="ai-title">From concept to shipped product</div>
+      <div class="ai-body">I scope, prototype, build, and ship AI features — not just slide decks about them. KRISPER went from idea to working RAG pipeline, solo, end-to-end.</div>
+      <div class="ai-chips">
+        <span class="ai-chip">Vector DBs</span>
+        <span class="ai-chip">Prompt engineering</span>
+        <span class="ai-chip">Python</span>
+        <span class="ai-chip">API integration</span>
+      </div>
+    </div>
+
+    <div class="ai-card reveal reveal-delay-3">
+      <div class="ai-eyebrow">WHERE I DON'T APPLY AI</div>
+      <div class="ai-title">Knowing when to say no</div>
+      <div class="ai-body">Patient safety decisions. Regulatory sign-off. Anything where an LLM hallucination has clinical consequences. I design the boundaries, not just the capabilities.</div>
+      <div class="ai-chips">
+        <span class="ai-chip" style="border-color:rgba(255,107,107,0.3);color:var(--coral);background:rgba(255,107,107,0.08)">Safety-critical</span>
+        <span class="ai-chip" style="border-color:rgba(255,107,107,0.3);color:var(--coral);background:rgba(255,107,107,0.08)">High-stakes clinical</span>
+        <span class="ai-chip" style="border-color:rgba(255,107,107,0.3);color:var(--coral);background:rgba(255,107,107,0.08)">Autonomous dosing</span>
+      </div>
+    </div>
+
+    <div class="ai-card reveal reveal-delay-4">
+      <div class="ai-eyebrow">MY TOOLBOX</div>
+      <div class="ai-title">Hands-on technical fluency</div>
+      <div class="ai-body">Not a spectator. I build, evaluate, and iterate on AI systems with real product instincts and domain knowledge few PMs can match.</div>
+      <div class="ai-chips">
+        <span class="ai-chip">OpenAI / Anthropic APIs</span>
+        <span class="ai-chip">LangChain</span>
+        <span class="ai-chip">Pinecone</span>
+        <span class="ai-chip">Databricks</span>
+        <span class="ai-chip">AWS Bedrock</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ STAGE 4: TRANSFORMATION ══ -->
+<section class="stage" id="stage4">
+  <div class="stage-label reveal" style="color:var(--coral)">
+    <span class="num" style="border-color:var(--coral);color:var(--coral)">04</span>
+    TRANSFORMATION — MY UNIQUE VALUE
+  </div>
+
+  <div class="transform-hero reveal">
+    <p class="transform-quote">
+      "I don't just understand complex systems.
+      <strong>I transform them.</strong>
+    </p>
+  </div>
+
+  <div class="outcome-row reveal reveal-delay-1">
+    <div class="outcome-cell">
+      <div class="oc-num">Weeks</div>
+      <div class="oc-label" style="margin-top:4px">↓</div>
+      <div class="oc-num" style="color:var(--teal)">Minutes</div>
+      <div class="oc-label">Regulatory review time, with KRISPER</div>
+    </div>
+    <div class="outcome-cell">
+      <div class="oc-num">FDA</div>
+      <div class="oc-label" style="margin-top:4px">+EMA+ICH</div>
+      <div class="oc-num" style="font-size:32px;color:var(--teal)">Cited</div>
+      <div class="oc-label">Hallucination-reduced answers with source citations</div>
+    </div>
+    <div class="outcome-cell">
+      <div class="oc-num">Zero</div>
+      <div class="oc-label" style="margin-top:4px">to</div>
+      <div class="oc-num" style="color:var(--teal)">Live</div>
+      <div class="oc-label">Built KRISPER solo — concept to working product</div>
+    </div>
+    <div class="outcome-cell">
+      <div class="oc-num">People</div>
+      <div class="oc-label" style="margin-top:4px">+</div>
+      <div class="oc-num" style="color:var(--teal)">Tech</div>
+      <div class="oc-label">The rare combination — domain depth + human-first delivery</div>
+    </div>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto;text-align:center" class="reveal reveal-delay-2">
+    <p style="font-size:16px;font-weight:300;color:var(--text);line-height:1.9">
+      I identify the inefficiency. I understand the domain. I build the solution.
+      And I make sure the right people actually use it.
+      <br><br>
+      <span style="color:var(--white);font-weight:600">That is the complete loop. Most people can do one or two parts. I do all of it.</span>
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ PROJECTS / CASE STUDIES ══ -->
+<section class="stage" id="projects">
+  <div class="stage-label reveal" style="color:var(--teal)">
+    <span class="num" style="border-color:var(--teal);color:var(--teal)">05</span>
+    WORK — CASE STUDIES
+  </div>
+  <h2 class="stage-title reveal reveal-delay-1">What I've built<br>and what's next.</h2>
+  <p class="stage-sub reveal reveal-delay-2">
+    KRISPER is the first. This ecosystem grows over time — each project plugging into the same foundation of pharma domain + AI + people-first delivery.
+  </p>
+
+  <div class="projects-grid">
+    <!-- KRISPER — Featured -->
+    <div class="project-card featured reveal">
+      <div class="pc-top">
+        <div class="pc-badge badge-live">● LIVE</div>
+        <div class="pc-title">KRISPER</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--teal);margin-bottom:12px;letter-spacing:0.05em">AI Regulatory Co-Pilot</div>
+        <div class="pc-sub">
+          A RAG-based regulatory intelligence platform that gives pharma and clinical teams cited, hallucination-reduced answers against FDA, EMA, and ICH guidance documents — transforming weeks of compliance review into minutes.<br><br>
+          Built solo. End-to-end. From prompt design to vector retrieval to trust scoring.
+        </div>
+        <div class="pc-stats">
+          <div class="pc-stat"><span>~80%</span>time saved vs manual</div>
+          <div class="pc-stat"><span>3</span>regulatory bodies</div>
+          <div class="pc-stat"><span>Solo</span>built end-to-end</div>
+          <div class="pc-stat"><span>0</span>hallucinations, cited sources</div>
+        </div>
+      </div>
+      <div class="pc-footer">
+        <div class="pc-tags">
+          <span class="pc-tag">RAG</span>
+          <span class="pc-tag">FDA · EMA · ICH</span>
+          <span class="pc-tag">Vector DB</span>
+          <span class="pc-tag">Python</span>
+        </div>
+        <a href="#consult" class="pc-link">Discuss →</a>
+      </div>
+    </div>
+
+    <!-- Coming soon 1 -->
+    <div class="project-card reveal reveal-delay-1">
+      <div class="pc-top">
+        <div class="pc-badge badge-next">◆ NEXT</div>
+        <div class="pc-title">Clinical Trial Protocol Assistant</div>
+        <div class="pc-sub">AI agent to detect protocol deviations, flag eligibility risks, and assist site coordinators in real-time decision support.</div>
+      </div>
+      <div class="pc-footer">
+        <div class="pc-tags"><span class="pc-tag">Agentic AI</span><span class="pc-tag">Clinical Ops</span></div>
+        <span style="font-size:11px;color:var(--dim)">In planning</span>
+      </div>
+    </div>
+
+    <!-- Placeholder 1 -->
+    <div class="project-placeholder reveal reveal-delay-2">
+      <div class="pp-icon">+</div>
+      <div class="pp-text">
+        <strong style="color:var(--dim)">Future project</strong><br>
+        This ecosystem grows.<br>New case study coming soon.
+      </div>
+    </div>
+
+    <!-- Blog coming -->
+    <div class="project-card reveal reveal-delay-3">
+      <div class="pc-top">
+        <div class="pc-badge badge-future">◎ FUTURE</div>
+        <div class="pc-title">Pharmacovigilance Signal Detector</div>
+        <div class="pc-sub">Automated adverse event triage and PSUR drafting using NLP across large post-market safety datasets.</div>
+      </div>
+      <div class="pc-footer">
+        <div class="pc-tags"><span class="pc-tag">NLP</span><span class="pc-tag">PV</span><span class="pc-tag">Safety</span></div>
+        <span style="font-size:11px;color:var(--dim)">Concept</span>
+      </div>
+    </div>
+
+    <!-- Placeholder 2 -->
+    <div class="project-placeholder reveal reveal-delay-4">
+      <div class="pp-icon">+</div>
+      <div class="pp-text">
+        <strong style="color:var(--dim)">Your problem here</strong><br>
+        Got a pharma + AI challenge?<br>Let's build it together.
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ BLOG ══ -->
+<section class="stage" id="blog">
+  <div class="stage-label reveal" style="color:var(--gold)">
+    <span class="num" style="border-color:var(--gold);color:var(--gold)">06</span>
+    WRITING — INSIGHTS
+  </div>
+  <h2 class="stage-title reveal reveal-delay-1">Thoughts on AI,<br>pharma & the gap between.</h2>
+
+  <div class="blog-list">
+    <a href="#" class="blog-item reveal reveal-delay-1">
+      <div class="bi-date">COMING SOON</div>
+      <div class="bi-title">Why pharma is the hardest — and best — AI opportunity right now</div>
+      <div class="bi-excerpt">The regulatory complexity that scares most AI companies is exactly what makes this domain rich with untapped leverage. Here's what I see that others miss.</div>
+      <div class="bi-read">Read post</div>
+    </a>
+    <a href="#" class="blog-item reveal reveal-delay-2">
+      <div class="bi-date">COMING SOON</div>
+      <div class="bi-title">RAG vs fine-tuning for regulatory documents — a practitioner's take</div>
+      <div class="bi-excerpt">After building KRISPER, I have strong opinions. Citations matter more than raw accuracy when a hallucination can kill a submission.</div>
+      <div class="bi-read">Read post</div>
+    </a>
+    <a href="#" class="blog-item reveal reveal-delay-3">
+      <div class="bi-date">COMING SOON</div>
+      <div class="bi-title">The people-person's guide to being taken seriously as a technical PM</div>
+      <div class="bi-excerpt">You don't need to be an engineer. But you do need to build a specific kind of credibility. What works, what backfires, and why soft skills are the hardest kind.</div>
+      <div class="bi-read">Read post</div>
+    </a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ══ CONSULT ══ -->
+<section id="consult">
+  <div class="consult-hero-text reveal">
+    <div class="stage-label" style="color:var(--teal);justify-content:center;margin-bottom:20px">
+      <span class="num" style="border-color:var(--teal);color:var(--teal)">07</span>
+      WORK WITH ME
+    </div>
+    <h2 class="consult-title">Let's build something<br>that actually matters.</h2>
+    <p class="consult-sub">Whether you need AI product strategy for a pharma team, regulatory intelligence tooling, or a 30-min brain dump — I'm here. No fluff, just results.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn-a">Book a 30-min call →</a>
+      <a href="mailto:hello@chaitanyareddy.com" class="btn-b">Send an email</a>
+    </div>
+  </div>
+
+  <div class="offerings reveal reveal-delay-1">
+    <div class="offering">
+      <div class="offering-tier">TIER 01</div>
+      <div class="offering-price">Free</div>
+      <div class="offering-cadence">30-MIN DISCOVERY CALL</div>
+      <div class="offering-name">Exploration call</div>
+      <div class="offering-desc">You've got a question about AI in pharma or regulatory ops. I've probably thought about it a lot. Let's talk.</div>
+    </div>
+    <div class="offering highlight">
+      <div class="offering-tier">TIER 02 · POPULAR</div>
+      <div class="offering-price">$</div>
+      <div class="offering-cadence">HALF OR FULL DAY</div>
+      <div class="offering-name">Strategy session</div>
+      <div class="offering-desc">AI roadmap, regulatory workflow assessment, or product strategy for your pharma or biotech team. Deep work, real outcomes.</div>
+    </div>
+    <div class="offering">
+      <div class="offering-tier">TIER 03</div>
+      <div class="offering-price">$$</div>
+      <div class="offering-cadence">MONTHLY RETAINER</div>
+      <div class="offering-name">Embedded advisor</div>
+      <div class="offering-desc">Ongoing AI PM or regulatory intelligence advisory embedded in your team. Flexible scope, sustained impact over time.</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end journey -->
+
+<footer>
+  <div style="font-family:var(--mono);font-size:11px">© 2025 Chaitanya Reddy · Pharma × AI × People</div>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+    <a href="#">Resume</a>
+    <a href="#">Email</a>
+  </div>
+</footer>
+
+<script>
+/* ══ CANVAS: Living ecosystem background ══ */
+const canvas = document.getElementById('canvas-bg');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const COLORS = ['#00c9a7','#7c6fff','#f0a500','#00e5c0'];
+
+class Node {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 2 + 1;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = Math.random() * 0.5 + 0.1;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + Math.floor(this.alpha * 255).toString(16).padStart(2,'0');
+    ctx.fill();
+  }
+}
+
+const nodes = Array.from({length: 80}, () => new Node());
+
+function connectNodes() {
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 140) {
+        const alpha = (1 - dist / 140) * 0.08;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(0,201,167,${alpha})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  nodes.forEach(n => { n.update(); n.draw(); });
+  connectNodes();
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ══ SCROLL REVEAL ══ */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+reveals.forEach(r => observer.observe(r));
+
+/* ══ NAV ACTIVE STATE ══ */
+const sections = ['stage1','stage2','stage3','stage4','projects','blog','consult'];
+const navPills = document.querySelectorAll('.nav-pill');
+const scrollObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navPills.forEach(p => p.classList.remove('active'));
+      const active = document.querySelector(`.nav-pill[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) scrollObs.observe(el);
+});
+</script>
+</body>
+</html>
